@@ -11,7 +11,7 @@ export default {
   props: {
     messages: { type: Array, required: true },
   },
-}
+};
 </script>
 
 <style lang="css">

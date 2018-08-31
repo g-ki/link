@@ -1,13 +1,14 @@
 <template lang="html">
   <div class="chat">
     <Messages :messages="messages" />
-    <ChatInput @submit="sendMsg" />
+    <ChatInput @submit="sendMessage" />
   </div>
 </template>
 
 <script>
-import { connectToChatRoot } from './hub';
-import { localPeerId, peers } from './peer';
+import { mapActions, mapState } from 'vuex';
+import localStore from './store';
+
 import Messages from './components/Messages.vue';
 import ChatInput from './components/Input.vue';
 
@@ -17,27 +18,24 @@ export default {
     ChatInput,
   },
 
-  data() {
-    return {
-      messages: [],
-      chatPeers: {},
-    };
+  computed: {
+    ...mapState('chat', ['chats']),
+    messages() {
+      return this.chats.global.messages;
+    },
   },
 
   methods: {
-    sendMsg(value) {
-      const msg = { from: localPeerId, value, id: `${localPeerId}-${Date.now()}` };
-      for (const peerId in peers) {
-        if (peers[peerId].connected) peers[peerId].send(JSON.stringify(msg));
-      }
-      this.messages.push(msg);
+    ...mapActions('chat', ['init', 'initChat']),
+    sendMessage(value) {
+      this.$store.dispatch('chat/sendMessage', { chatId: 'global', value });
     },
   },
 
   created() {
-    connectToChatRoot('chatRoomId', (msg) => {
-      this.messages.push(JSON.parse(msg));
-    });
+    this.$store.registerModule('chat', localStore());
+    this.init();
+    this.initChat('global');
   },
 };
 </script>

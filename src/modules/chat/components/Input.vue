@@ -14,12 +14,11 @@ export default {
 
   methods: {
     submit() {
-      console.log(`Send: ${this.value}`);
       this.$emit('submit', this.value);
       this.value = '';
     },
   },
-}
+};
 </script>
 
 <style lang="css">

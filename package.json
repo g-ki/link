@@ -11,7 +11,8 @@
   "dependencies": {
     "signalhub": "^4.9.0",
     "simple-peer": "^9.1.2",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-rc.12",
