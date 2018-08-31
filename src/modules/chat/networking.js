@@ -10,10 +10,9 @@ const createSession =
   (chatId, localPeerId, peerId) => ({ chatId, localPeerId, peerId });
 
 
-export const connect = (setPeer, session, options) => {
+export const connect = (session, options) => {
   console.log('connecting... ', session.peerId);
   const peer = new Peer({ ...options, trickle: false });
-  setPeer({ chatId: session.chatId, peerId: session.peerId, peer });
 
   peer.on('signal', (signal) => {
     sendTo(
@@ -48,7 +47,8 @@ export const discoverPeers = (peers, chanelName, localPeerId) => {
     if (peerId !== localPeerId && peers.get(peerId) === undefined) {
       console.log('try to connect', peerId);
       const session = createSession(chanelName, localPeerId, peerId);
-      connect(peers.set, session, { initiator: true });
+      const peer = connect(session, { initiator: true });
+      peers.set({ chatId: session.chatId, peerId: session.peerId, peer });
     }
   });
 };
@@ -59,7 +59,8 @@ export const acceptConnections = (peers, localPeerId) => {
     let peer = peers.get(peerId);
     if (peer === undefined) {
       const session = createSession(chatId, localPeerId, peerId);
-      peer = connect(peers.set, session);
+      peer = connect(session);
+      peers.set({ chatId: session.chatId, peerId: session.peerId, peer });
     }
     peer.signal(signal);
   });
