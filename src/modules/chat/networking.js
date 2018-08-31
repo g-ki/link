@@ -1,41 +1,39 @@
 import Peer from 'simple-peer';
+import hub from './hub';
 
 
-export const conncetToPeer = (setPeer, hub, localPeerId) => (peerId, options) => {
+const sendTo = (to, data, callback) => hub.broadcast(to, data, callback);
+const subscribe = (to, onData) => hub.subscribe(to).on('data', onData);
+
+
+export const connect = (setPeer, localPeerId, peerId, options) => {
   const peer = new Peer({ ...options, trickle: false });
-  setPeer({ peerId, peer });
-  console.log(`${localPeerId} -> ${peerId}`);
   peer.on('signal', (signal) => {
-    hub.broadcast(peerId, { peerId: localPeerId, signal });
+    sendTo(peerId, { peerId: localPeerId, signal });
   });
+  console.log(`connect ${localPeerId} => ${peerId}`);
+  setPeer({ peerId, peer });
   return peer;
 };
 
 
-export const listenForSignals = (getPeer, connectTo) => ({ peerId, signal }) => {
-  console.log('listenForSignals');
-  let peer = getPeer(peerId);
-  if (peer === undefined) {
-    peer = connectTo(peerId);
-  }
-  peer.signal(signal);
-};
-
-
-export const sendSignal = (getPeer, connectTo, localPeerId) => (peerId) => {
-  console.log('sendSignal');
-  if (peerId !== localPeerId) {
-    let peer = getPeer(peerId);
-    if (peer === undefined) {
-      peer = connectTo(peerId, { initiator: true });
+export const discoverPeers = (peers, chanelName, localPeerId) => {
+  sendTo(chanelName, localPeerId); // introduce
+  // conncet to new peers
+  subscribe(chanelName, (peerId) => {
+    if (peerId !== localPeerId && peers.get(peerId) === undefined) {
+      connect(peers.set, localPeerId, peerId, { initiator: true });
     }
-  }
+  });
 };
 
 
-export const connectToHelloChanel = (hub, sayHello) => (chanelName, hello) => {
-  console.log('hey all');
-  hub.broadcast(chanelName, hello);
-  // on hello
-  hub.subscribe(chanelName).on('data', sayHello);
+export const acceptConnections = (peers, localPeerId) => {
+  subscribe(localPeerId, ({ peerId, signal }) => {
+    let peer = peers.get(peerId);
+    if (peer === undefined) {
+      peer = connect(peers.set, localPeerId, peerId);
+    }
+    peer.signal(signal);
+  });
 };
