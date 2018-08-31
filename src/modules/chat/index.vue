@@ -40,5 +40,20 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style scoped>
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.chat .messages {
+  flex: 1;
+  height: 100%;
+  outline: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  overscroll-behavior: contain contain;
+}
 </style>
