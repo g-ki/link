@@ -19,11 +19,13 @@ export default {
     Vue.set(state.peers, peerId, peer);
   },
 
-  [types.PUSH_MESSAGE](state, { chatId, msg }) {
-    state.chats[chatId].messages.push(msg);
+  [types.PUSH_MESSAGE](state, { msg }) {
+    state.chats[msg.chatId].messages.push(msg);
   },
 
   [types.ADD_PEER_TO_CHAT](state, { chatId, peerId }) {
-    state.chats[chatId].peers.push(peerId);
+    if (!state.chats[chatId].peers.includes(peerId)) {
+      state.chats[chatId].peers.push(peerId);
+    }
   },
 };

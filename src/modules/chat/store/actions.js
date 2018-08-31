@@ -22,15 +22,15 @@ export const initChat = (ctx, chatId) => {
 };
 
 
-export const setPeer = (ctx, { peerId, peer }) => {
+export const setPeer = (ctx, { peerId, peer, chatId }) => {
+  ctx.commit(types.ADD_PEER_TO_CHAT, { chatId, peerId });
   if (ctx.state.peers[peerId] === undefined) {
     ctx.commit(types.SET_PEER, { peerId, peer });
-    ctx.commit(types.ADD_PEER_TO_CHAT, { chatId: 'global', peerId });
 
     // setup peer connection
     peer.on('data', (jsonMsg) => {
       const msg = JSON.parse(jsonMsg);
-      ctx.commit(types.PUSH_MESSAGE, { chatId: msg.chatId, msg });
+      ctx.commit(types.PUSH_MESSAGE, { msg });
     });
   }
 };
