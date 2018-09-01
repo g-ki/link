@@ -1,7 +1,12 @@
 <template lang="html">
   <div class="chat">
-    <Messages :messages="messages" />
-    <ChatInput @submit="sendMessage" />
+    <div class="chat-left">
+      <ChatList :chats="chats" />
+    </div>
+    <div class="chat-main">
+      <Messages :messages="messages" />
+      <ChatInput @submit="sendMessage" />
+    </div>
   </div>
 </template>
 
@@ -9,11 +14,13 @@
 import { mapActions, mapState } from 'vuex';
 import localStore from './store';
 
+import ChatList from './components/ChatList.vue';
 import Messages from './components/Messages.vue';
 import ChatInput from './components/Input.vue';
 
 export default {
   components: {
+    ChatList,
     Messages,
     ChatInput,
   },
@@ -43,11 +50,27 @@ export default {
 <style scoped>
 .chat {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  height: calc(100% - 75px);
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-top: 50px;
+  padding-bottom: 25px;
 }
 
-.chat .messages {
+.chat-left {
+  flex: 0 0 25%;
+  max-width: 420px;
+  min-width: 240px;
+}
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.chat-main .messages {
   flex: 1;
   height: 100%;
   outline: none;

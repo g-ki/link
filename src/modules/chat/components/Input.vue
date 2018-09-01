@@ -1,6 +1,10 @@
 <template lang="html">
   <div class="chat-input">
-    <textarea v-model="value" @keyup.enter="submit" placeholder="Type a message..."></textarea>
+    <textarea
+      v-model="value"
+      @keyup.enter="submit"
+      placeholder="Type a message..."
+      autofocus></textarea>
   </div>
 </template>
 
