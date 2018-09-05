@@ -22,25 +22,29 @@ export default {
   computed: {
     ...mapState('chat', ['localPeerId']),
     lastMessage() {
-      return this.chat.messages[this.chat.messages.length - 1];
+      const { messages } = this.chat;
+      return messages[messages.length - 1];
     },
+
     lastMessageFrom() {
-      if (this.lastMessage.from === this.localPeerId)
-        return 'You';
-      else
-        return this.lastMessage.from;
-    }
-  }
+      if (this.lastMessage.from === this.localPeerId) { return 'You'; }
+      return this.lastMessage.from;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .chat-list-item {
-  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+  /* box-shadow: 0 2px 12px 0 rgba(0,0,0,.1); */
   background-color: #fff;
   border-radius: 5px;
   padding: 12px;
   margin-bottom: 15px;
+}
+
+.router-link-active .chat-list-item {
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
 }
 
 .chat-name {
@@ -51,5 +55,8 @@ export default {
   color: rgba(153, 153, 153, 1);
   font-size: 13px;
   font-weight: 400;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>

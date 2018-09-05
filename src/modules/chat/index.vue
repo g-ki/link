@@ -4,14 +4,21 @@
       <ChatList :chats="chats" />
     </div>
     <div class="chat-main">
-      <Messages :messages="messages" />
-      <ChatInput @submit="sendMessage" />
+
+      <template v-if="currentChat">
+        <Messages :messages="currentMessages" />
+        <ChatInput @submit="sendMessage" />
+      </template>
+
+      <div v-else class="no-chat">
+        <h2>+ Create New Chat</h2>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import localStore from './store';
 
 import ChatList from './components/ChatList.vue';
@@ -26,23 +33,29 @@ export default {
   },
 
   computed: {
-    ...mapState('chat', ['chats']),
-    messages() {
-      return this.chats.global.messages;
-    },
+    ...mapState('chat', ['chats', 'currentChat']),
+    ...mapGetters('chat', ['currentMessages']),
   },
 
   methods: {
-    ...mapActions('chat', ['init', 'initChat']),
+    ...mapActions('chat', ['init', 'initChat', 'setCurrentChat']),
     sendMessage(value) {
-      this.$store.dispatch('chat/sendMessage', { chatId: 'global', value });
+      this.$store.dispatch('chat/sendMessage', { chatId: this.currentChat, value });
     },
   },
 
   created() {
     this.$store.registerModule('chat', localStore());
     this.init();
-    this.initChat('global');
+    const chatId = this.$route.params.id;
+    if (chatId) { this.setCurrentChat(chatId); }
+  },
+
+  watch: {
+    $route() {
+      const chatId = this.$route.params.id;
+      this.setCurrentChat(chatId);
+    },
   },
 };
 </script>
@@ -61,6 +74,7 @@ export default {
   flex: 0 0 25%;
   max-width: 420px;
   min-width: 240px;
+  overflow-y: auto;
 }
 
 .chat-main {
@@ -78,5 +92,21 @@ export default {
   overflow-y: auto;
   position: relative;
   overscroll-behavior: contain contain;
+  padding-right: 8px;
+}
+
+.no-chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.no-chat h2 {
+  color: rgba(153, 153, 153, 1);
+}
+
+.chat-list {
+  padding-right: 8px;
 }
 </style>

@@ -6,12 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "pubsub": "signalhub listen -p 8888"
+    "pubsub": "signalhub listen -p 8888 -h 0.0.0.0"
   },
   "dependencies": {
     "signalhub": "^4.9.0",
     "simple-peer": "^9.1.2",
     "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

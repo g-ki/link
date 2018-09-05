@@ -19,7 +19,10 @@ export default {
   methods: {
     submit(event) {
       if (!event.shiftKey) {
-        this.$emit('submit', this.value);
+        const trimmed = this.value.trim();
+        if (trimmed) {
+          this.$emit('submit', trimmed);
+        }
         this.value = '';
       }
     },

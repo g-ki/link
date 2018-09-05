@@ -4,6 +4,7 @@
       <h5 class="from" v-if="msg.from !== localPeerId">
         {{ msg.from }}
       </h5>
+
       <div class="message-content clearfix">
         <div :class="['message-bubble', {'from-self': msg.from === localPeerId }]">
           {{ msg.value }}
@@ -52,7 +53,7 @@ export default {
   padding: 6px 12px;
   border-radius: 1.3em;
   max-width: 55%;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .from-self {

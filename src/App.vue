@@ -1,17 +1,12 @@
 <template>
   <div id="app">
-    <Chat />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Chat from '@/modules/chat';
-
 export default {
   name: 'app',
-  components: {
-    Chat,
-  },
 };
 </script>
 
@@ -34,4 +29,28 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  width: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-clip: content-box;
+  background-color: rgba(0, 0, 0, .4);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+    background: red;
+} */
+
 </style>

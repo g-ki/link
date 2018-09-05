@@ -22,6 +22,12 @@ export const initChat = (ctx, chatId) => {
 };
 
 
+export const setCurrentChat = (ctx, chatId) => {
+  ctx.commit(types.SET_CURRENT_CHAT, chatId);
+  ctx.dispatch('initChat', chatId);
+};
+
+
 export const setPeer = (ctx, { peerId, peer, chatId }) => {
   ctx.commit(types.ADD_PEER_TO_CHAT, { chatId, peerId });
   if (ctx.state.peers[peerId] === undefined) {

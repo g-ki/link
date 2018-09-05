@@ -15,6 +15,10 @@ export default {
     }
   },
 
+  [types.SET_CURRENT_CHAT](state, chatId) {
+    Vue.set(state, 'currentChat', chatId);
+  },
+
   [types.SET_PEER](state, { peerId, peer }) {
     Vue.set(state.peers, peerId, peer);
   },
