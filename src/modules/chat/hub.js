@@ -1,7 +1,10 @@
 import signalhub from 'signalhub';
 
+const { host, protocol } = window.location;
+const port = '8888';
+
 const hub = signalhub('link-chat', [
-  'http://localhost:8888',
+  `${protocol}//${host}:${port}`,
 ]);
 
 export default hub;
